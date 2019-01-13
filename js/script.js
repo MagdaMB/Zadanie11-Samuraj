@@ -1,16 +1,37 @@
-let time = document.querySelector(".result");
+const btnStart = document.querySelector(".start");
+const btnReset = document.querySelector(".reset");
+let result = document.querySelector(".result");
 
-const showTime = () => {
-    const date = new Date();
+let seconds = 0;
+let active = false;
 
-    let hour = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
-    let minute = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
-    let seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
-
-
-    time.textContent = `Aktualna godzina to: ${hour}:${minute}:${seconds}`;
-
-
+let idInterval;
+const start = () => {
+    seconds++;
+    result.textContent = (seconds / 100).toFixed(3);
 }
 
-setInterval(showTime, 1000);
+const startTime = () => {
+
+
+    if (!active) {
+        btnStart.textContent = "Pauza";
+        active = true;
+        idInterval = setInterval(start, 10);
+    } else {
+        btnStart.textContent = "Start";
+        active = false;
+        clearInterval(idInterval);
+    }
+}
+
+const resetTime = () => {
+    result.textContent = "---";
+    seconds = 0;
+    active = false;
+    clearInterval(idInterval);
+    btnStart.textContent = "Start";
+}
+
+btnStart.addEventListener('click', startTime);
+btnReset.addEventListener('click', resetTime);
